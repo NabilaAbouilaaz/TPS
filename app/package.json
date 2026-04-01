@@ -1,0 +1,16 @@
+{
+  "name": "tp-archi-distribuee-app",
+  "version": "1.0.0",
+  "description": "TP architecture distribuee commandes",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "consumer": "node consumer.js"
+  },
+  "dependencies": {
+    "amqplib": "^0.10.4",
+    "express": "^4.21.2",
+    "ioredis": "^5.4.2",
+    "mongoose": "^8.12.1"
+  }
+}
