@@ -1,0 +1,54 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: api-gateway
+
+  cloud:
+    gateway:
+      # Exercice 2 : Routes vers Product Service et Order Service
+      routes:
+        - id: product-service
+          uri: lb://product-service
+          predicates:
+            # {segment:.*} matche /products, /products/, /products/1, etc.
+            - Path=/products{segment:.*}
+          filters:
+            - RewritePath=/products(?<segment>.*), /api/products${segment}
+
+        - id: order-service
+          uri: lb://order-service
+          predicates:
+            # {segment:.*} matche /orders, /orders/, /orders?params, etc.
+            - Path=/orders{segment:.*}
+          filters:
+            - RewritePath=/orders(?<segment>.*), /api/orders${segment}
+
+      # Activer la découverte automatique via Eureka
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+
+# Eureka
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+
+# Actuator
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, gateway
+  info:
+    env:
+      enabled: true
+
+info:
+  app:
+    name: api-gateway
+    description: Point d'entrée unique - API Gateway
+    version: 0.0.1-SNAPSHOT
